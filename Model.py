@@ -4,26 +4,6 @@ import torch as torch
 from torch import nn, autograd
 
 
-class CNN_test(nn.Module):
-    def __init__(self):
-        super(CNN_test, self).__init__()
-        self.model = nn.Sequential(
-            nn.Conv2d(3, 32, 5, 1, 2),
-            nn.MaxPool2d(2),
-            nn.Conv2d(32, 32, 5, 1, 2),
-            nn.MaxPool2d(2),
-            nn.Conv2d(32, 64, 5, 1, 2),
-            nn.MaxPool2d(2),
-            nn.Flatten(),
-            nn.Linear(64 * 4 * 4, 64),
-            nn.Linear(64, 10)
-        )
-
-    def forward(self, x):
-        x = self.model(x)
-        return x
-
-
 class CNN_apnea(nn.Module):
     def __init__(self):
         super(CNN_apnea, self).__init__()
@@ -45,7 +25,7 @@ class CNN_apnea(nn.Module):
             nn.ReLU(),
             nn.BatchNorm1d(30),
             nn.Flatten(),
-            nn.Dropout(0.25),
+            # nn.Dropout(0.25),
             nn.Linear(1950, 2),
             nn.Softmax(1)
 

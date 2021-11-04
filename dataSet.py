@@ -4,7 +4,20 @@ import pandas as pd
 from torch.utils.data import Dataset
 
 # %%
-prefix = [0, 44582, 90400, 141442, 186256, 240220, 287142, 338708, 391034, 433376, 482146, 535624, 587030, 629992, 679484, 726312, 774268, 829238, 883526, 933234, 979610, 1034228]
+folder = "D:\\project\\python\\myDesign\\CNN_sleep_apnea_pytorch\\data\\data_smote"
+files = os.listdir(folder)
+
+idx_list = []
+i = 0
+for file in files:
+    print("正在载入: " + str(i))
+    i = i + 1
+    idx_list.append(len(pd.read_csv("data\\data_smote\\" + file)))
+
+prefix = [0]
+
+for i in range(len(idx_list)):
+    prefix.append(prefix[i] + idx_list[i])
 
 
 # %%
@@ -33,4 +46,3 @@ class MyData(Dataset):
 
 if __name__ == "__main__":
     dataSet = MyData("D:\\project\\python\\myDesign\\CNN_sleep_apnea_pytorch\\data\\data_smote\\")
-
