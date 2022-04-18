@@ -49,7 +49,7 @@ total_test_step = 0
 epoch = 3
 
 # 添加tensorboard
-writer = SummaryWriter("logs")
+writer = SummaryWriter("logs_cnn")
 
 for i in range(epoch):
     print("-------第 {} 轮训练开始-------".format(i+1))

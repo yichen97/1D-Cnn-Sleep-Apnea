@@ -25,9 +25,9 @@ test_dataloader = DataLoader(test_data, batch_size=256)
 
 # 创建网络模型
 
-CNN_apnea = CNN_apnea()
+model = CNN_apnea()
 if torch.cuda.is_available():
-    CNN_apnea = CNN_apnea.cuda()
+    model = model.cuda()
 
 # 损失函数
 loss_fn = nn.CrossEntropyLoss()
@@ -37,7 +37,7 @@ if torch.cuda.is_available():
 # 优化器
 
 learning_rate = 1e-3
-optimizer = torch.optim.Adam(CNN_apnea.parameters(), lr=learning_rate, weight_decay=1e-5)
+optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=1e-5)
 
 # 设置训练网络的一些参数
 # 记录训练的次数
@@ -48,20 +48,20 @@ total_test_step = 0
 epoch = 20
 
 # 添加tensorboard
-writer = SummaryWriter("logs")
+writer = SummaryWriter("logs_cnn")
 
 for i in range(epoch):
     print("-------第 {} 轮训练开始-------".format(i + 1))
     time_start = time.time()
     # 训练步骤开始
-    CNN_apnea.train()
+    model.train()
     for data in train_dataloader:
         signal, label = data
         signal = torch.unsqueeze(signal, 1)
         if torch.cuda.is_available():
             signal = signal.cuda()
             label = label.cuda()
-        outputs = CNN_apnea(signal)
+        outputs = model(signal)
         loss = loss_fn(outputs, label)
 
         # 优化器优化模型
@@ -77,7 +77,7 @@ for i in range(epoch):
     print('train cost', time_end - time_start)
 
     # 测试步骤开始
-    CNN_apnea.eval()
+    model.eval()
     total_test_loss = 0
     TP = 0
     TN = 0
@@ -90,7 +90,7 @@ for i in range(epoch):
             if torch.cuda.is_available():
                 signal = signal.cuda()
                 label = label.cuda()
-            outputs = CNN_apnea(signal)
+            outputs = model(signal)
             loss = loss_fn(outputs, label)
             total_test_loss = total_test_loss + loss.item()
             TP += ((outputs.argmax(1) == 1) & (label == 1)).sum()
